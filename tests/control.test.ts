@@ -1,0 +1,21 @@
+import chai from 'chai'
+
+
+describe('baseline tests', () => {
+  it('should add two numbers sucessfully', (done) => {
+    chai.expect(2 + 2).to.equal(4)
+    done()
+  })
+  it('should subtract two numbers sucessfully', (done) => {
+    chai.expect(4 - 2).to.equal(2)
+    done()
+  })
+  it('should multiply two numbers sucessfully', (done) => {
+    chai.expect(4 * 4).to.equal(16)
+    done()
+  })
+  it('should divide two numbers sucessfully', (done) => {
+    chai.expect(4 / 2).to.equal(2)
+    done()
+  })
+})

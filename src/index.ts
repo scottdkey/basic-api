@@ -1,17 +1,19 @@
 import koa from "koa"
-import indexRouter from "./routers/indexRouter"
+import bodyParser from "koa-bodyparser"
+import { indexRouter } from "./routers/indexRouter"
+import { config } from "dotenv"
 
+config()
 
 const app = new koa()
-
-
-
-const PORT = process.env.PORT || 5000
+app.use(bodyParser())
+const PORT = process.env.NODE_ENV == 'test' ? 8000 : process.env.PORT
 
 app.use(indexRouter.routes())
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Running on http://localhost:${PORT}`)
 })
 
-export { app }
+
+

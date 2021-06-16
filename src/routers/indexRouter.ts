@@ -1,9 +1,16 @@
 import Router from "koa-router"
 
 const indexRouter = new Router()
-indexRouter.get('/', async (ctx) => {
+indexRouter.get('/', async (ctx, next) => {
   ctx.body = { message: "hello world" }
   ctx.status = 200
+  next()
 })
 
-export default indexRouter
+indexRouter.put('/:test', async (ctx, next) => {
+  ctx.body = { message: ctx.params.test }
+  ctx.status = 200
+  next()
+})
+
+export { indexRouter }
