@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Push Docker Image to Docker Hub
+    name: Running Mocha test Suite
     runs-on: ubuntu-latest
 
     strategy:
