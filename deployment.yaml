@@ -32,12 +32,12 @@ metadata:
   labels:
     app: helloworld
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: helloworld
   ports:
     - protocol: TCP
       name: http
-      port: 5000
+      port: 80
       targetPort: 5000
       nodePort: 30026
