@@ -1,0 +1,18 @@
+version: v1.0
+name: Docker
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Build
+    task:
+      jobs:
+        - name: docker build
+          commands:
+            - checkout
+            - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
+            - docker build -t scottdkey/basic-api .
+            - 'docker push -t scottdkey/basic-api:latest'
+      secrets:
+        - name: docker
