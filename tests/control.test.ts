@@ -18,4 +18,9 @@ describe('baseline tests', () => {
     chai.expect(4 / 2).to.equal(2)
     done()
   })
+  //creating a test to fail to test pipeline
+  it('should fail to do anyhing', (done) => {
+    chai.expect(2 + 2).to.equal(16)
+    done()
+  })
 })
