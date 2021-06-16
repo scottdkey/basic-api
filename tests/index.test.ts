@@ -39,7 +39,7 @@ describe('routes:index', () => {
   it('GET: should validate new route', (done) => {
     chai
       .request(server)
-      .get('/')
+      .get('/test')
       .end((err, res) => {
         should.not.exist(err)
         res.status.should.equal(200);
