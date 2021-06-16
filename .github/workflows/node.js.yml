@@ -48,9 +48,8 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
       - name: deploy to cluster
-        uses: steebchen/kubectl@master
-      - uses: actions-hub/kubectl@master
+        uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+          KUBE_CONTEXT: ${{ secrets.KUBECONFIG }}
         with:
           args: apply -f deployment.yaml
