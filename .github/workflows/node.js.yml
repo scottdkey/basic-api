@@ -36,5 +36,5 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: scottdkey/basic-api:${{ steps.check.outputs.version }}
+        tags: scottdkey/basic-api:latest
         
