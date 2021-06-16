@@ -1,4 +1,4 @@
-@CompileDynamic
+
 /* groovylint-disable-next-line NglParseError */
 pipeline {
   environment {
