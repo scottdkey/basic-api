@@ -38,3 +38,20 @@ jobs:
         with:
           push: true
           tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{steps.package-version.outputs.current-version}}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: deploy to cluster
+        uses: steebchen/kubectl@master
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: apply -f deployment.yaml
