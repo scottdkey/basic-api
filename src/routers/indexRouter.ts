@@ -12,5 +12,10 @@ indexRouter.put('/:test', async (ctx, next) => {
   ctx.status = 200
   next()
 })
+indexRouter.get('/test', async (ctx, next) => {
+  ctx.body = { message: "this test works" }
+  ctx.status = 200
+  next()
+})
 
 export { indexRouter }

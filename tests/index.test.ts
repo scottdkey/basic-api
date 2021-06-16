@@ -36,4 +36,16 @@ describe('routes:index', () => {
         done()
       })
   })
+  it('GET: should validate new route', (done) => {
+    chai
+      .request(server)
+      .get('/')
+      .end((err, res) => {
+        should.not.exist(err)
+        res.status.should.equal(200);
+        res.type.should.equal('application/json')
+        res.body.message.should.equal("this test works")
+        done()
+      })
+  })
 })

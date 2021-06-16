@@ -1,8 +1,8 @@
 {
-  "name": "kubernetes-jenkins",
-  "version": "1.0.1",
+  "name": "basic-api",
+  "version": "1.0.2",
   "main": "index.js",
-  "repository": "https://github.com/scriptcamp/kubernetes-jenkins",
+  "repository": "https://github.com/scottdkey/basic-api/",
   "author": "Scott Key <scottdkey@gmail.com>",
   "license": "MIT",
   "scripts": {
