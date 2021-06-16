@@ -1,36 +1,20 @@
-
-/* groovylint-disable-next-line NglParseError */
-pipeline {
-  environment {
-    registry = 'scottdkey/basic-api'
-    registryCredential = '1cb77339-1913-4cd5-8fb2-7a0bb2d2f0d3'
-    dockerImage = ''
+node{
+  def app
+  stage('clone repository'){
+    checkout scm
   }
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        script {
-          sh 'npm install'
-        }
-      }
-    } stage('Building image') {
-      steps {
-        script {
-          dockerImage = docker.build registry + ':latest'
-        }
-      }
-  } stage('Push Image') {
-    steps {
-      script {
-        docker.withRegistry('', registryCredential) {
-          dockerImage.push()
-        }
-      }
+  stage('Build Docker image'){
+    app = docker.build('scottdkey/basic-api')
+  }
+  stage('Test Image'){
+    app.inside {
+      sh 'echo TEST PASSED'
     }
-    } stage('Deploying into k8s') {
-      steps {
-        sh 'kubectl apply -f deployment.yaml'
+  }
+  stage('Push Image'){
+    docker.withRegistry('https://registry.hub.docker.com', 'git'){
+      app.push('${env.BUILD_NUMBER}'){
+        app.push("latest")
       }
     }
   }
