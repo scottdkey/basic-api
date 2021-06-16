@@ -8,11 +8,15 @@ blocks:
   - name: Build
     task:
       jobs:
-        - name: docker build
+        - name: checkout and login
           commands:
             - checkout
             - 'echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin'
+        - name: docker build
+          commands:
             - 'docker build -t scottdkey/basic-api:$(echo $npm_package_version) .'
+        - name: docker Push
+          commands:
             - 'docker push scottdkey/basic-api:$(echo $npm_package_version)'
       secrets:
         - name: docker
