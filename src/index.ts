@@ -7,7 +7,7 @@ config()
 
 const app = new koa()
 app.use(bodyParser())
-const PORT = process.env.NODE_ENV == 'test' ? 8000 : process.env.PORT
+const PORT = process.env.NODE_ENV == 'test' ? 8000 : 5000
 
 app.use(indexRouter.routes())
 
