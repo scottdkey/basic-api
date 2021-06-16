@@ -11,7 +11,7 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
+            - 'echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin'
             - docker build -t scottdkey/basic-api .
             - 'docker push -t scottdkey/basic-api:latest'
       secrets:
