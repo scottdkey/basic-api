@@ -56,7 +56,7 @@ describe('routes:index', () => {
         should.not.exist(err)
         res.status.should.equal(200);
         res.type.should.equal('application/json')
-        res.body.message.should.equal("1.0.3 update successful")
+        res.body.message.should.equal("kube update successful")
         done()
       })
   })

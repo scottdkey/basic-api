@@ -18,7 +18,7 @@ indexRouter.get('/test', async (ctx, next) => {
   next()
 })
 indexRouter.get('/v3', async (ctx, next) => {
-  ctx.body = { message: "1.0.3 update successful" }
+  ctx.body = { message: "kube update successful" }
   ctx.status = 200
   next()
 })
