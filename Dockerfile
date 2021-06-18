@@ -1,4 +1,4 @@
-FROM node:16-buster-slim as build
+FROM node:current-alpine3.11 as build
 WORKDIR /usr/app
 COPY package.json .
 COPY yarn.lock .
@@ -9,7 +9,7 @@ RUN yarn tsc
 
 
 
-FROM node:16-buster-slim
+FROM node:current-alpine3.11
 WORKDIR /usr/app
 COPY package.json .
 COPY yarn.lock .

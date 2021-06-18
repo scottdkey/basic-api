@@ -1,6 +1,6 @@
 {
   "name": "basic-api",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "main": "index.js",
   "repository": "https://github.com/scottdkey/basic-api/",
   "author": "Scott Key <scottdkey@gmail.com>",
@@ -14,9 +14,11 @@
     "start": "node dist/index.js",
     "dev": "run-p watch:*",
     "build": "run-s build:*",
-    "test": "mocha -r ts-node/register tests/**/*.test.ts --exit"
+    "test": "mocha -r ts-node/register tests/**/*.test.ts --exit",
+    "kubeDeploy": "kubectl apply -f deployment.yaml"
   },
   "dependencies": {
+    "@koa/router": "^10.0.0",
     "dotenv": "^10.0.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
@@ -29,6 +31,7 @@
     "@types/koa": "^2.13.3",
     "@types/koa-bodyparser": "^4.3.1",
     "@types/koa-router": "^7.4.2",
+    "@types/koa__router": "^8.0.4",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.12.2",
     "chai": "^4.3.4",

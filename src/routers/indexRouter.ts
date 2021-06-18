@@ -1,4 +1,4 @@
-import Router from "koa-router"
+import Router from "@koa/router"
 
 const indexRouter = new Router()
 indexRouter.get('/', async (ctx, next) => {
@@ -14,6 +14,11 @@ indexRouter.put('/:test', async (ctx, next) => {
 })
 indexRouter.get('/test', async (ctx, next) => {
   ctx.body = { message: "this test works" }
+  ctx.status = 200
+  next()
+})
+indexRouter.get('/v3', async (ctx, next) => {
+  ctx.body = { message: "kube update successful" }
   ctx.status = 200
   next()
 })
