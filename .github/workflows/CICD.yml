@@ -32,6 +32,9 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
 
+      - name: Update SHA
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
+
       - name: Install Dependencies
         run: yarn --prefer-offline
 
@@ -48,10 +51,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{steps.package-version.outputs.current-version}}
+          tags: scottdkey/basic-api:latest, scottdkey/basic-api:$(echo $GITHUB_SHA | head -c7)
 
       - name: Update deployment file
-        run: TAG=$(echo ${{steps.package-version.outputs.current-version}} | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: deploy to kube cluster
         uses: actions-hub/kubectl@master
@@ -59,3 +62,10 @@ jobs:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: apply -f deployment.yaml
+
+      - name: verify deployment
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: rollout status deployment/basic-api
