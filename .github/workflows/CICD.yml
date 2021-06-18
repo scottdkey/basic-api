@@ -1,44 +1,63 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: CI
+name: basic-api-cicd
 
 on:
-  workflow_run:
-    workflows: ["Test"]
-    types: [completed]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  on-success:
-    name: build and push
+  build:
+    name: Running Mocha test Suite
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
+      - name: get Code
+        uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: get-npm-version
+
+      - name: get current version and set to variable
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
+
+      - run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
+
+      - name: Install Dependencies(Prefer Cached Dependencies)
+        run: yarn --prefer-offline
+
+      - name: run test suite
+        run: yarn test
+
       - name: Log into Docker Hub
         uses: docker/login-action@v1.9.0
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
-      - name: Push to Docker Hub
+
+      - name: build and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{steps.package-version.outputs.current-version}}
-  on-failure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - run: echo "Test was a failure"
+          tags: scottdkey/basic-api:latest, scottdkey/basic-api:$(echo $GITHUB_SHA | head -c7)
+
+      - name: Update deployment file
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yml
+
+      - name: deploy to kube cluster
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: apply -f deployment.yaml
