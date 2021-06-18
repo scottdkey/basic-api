@@ -61,7 +61,7 @@ jobs:
           tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{ github.sha }}
 
       - name: Update deployment file
-        run: sed -i 's|<IMAGE>|scottdkey/basic-api:'${ github.sha }'|' $GITHUB_WORKSPACE/deployment.yaml
+        run: sed -i 's|<IMAGE>|scottdkey/basic-api:"${ github.sha }"|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: deploy to kube cluster
         uses: actions-hub/kubectl@master
