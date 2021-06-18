@@ -51,7 +51,7 @@ describe('routes:index', () => {
   it('point update test for kube CICD test', (done) => {
     chai
       .request(server)
-      .get('/test')
+      .get('/v3')
       .end((err, res) => {
         should.not.exist(err)
         res.status.should.equal(200);
