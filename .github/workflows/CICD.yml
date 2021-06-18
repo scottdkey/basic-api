@@ -28,12 +28,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: get current version and set to variable
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
-
-      - run: echo ::set-env name=IMAGE_TAG::${GITHUB_REF:10}
-
       - name: Update SHA
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
 
@@ -64,10 +58,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{ env.IMAGE_TAG }}
+          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{ github.sha }}
 
       - name: Update deployment file
-        run: sed -i 's|<IMAGE>|scottdkey/basic-api:'${env.IMAGE_TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
+        run: sed -i 's|<IMAGE>|scottdkey/basic-api:'${ github.sha }'|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: deploy to kube cluster
         uses: actions-hub/kubectl@master
