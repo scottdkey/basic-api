@@ -1,4 +1,4 @@
-import Router from "koa-router"
+import Router from "@koa/router"
 
 const indexRouter = new Router()
 indexRouter.get('/', async (ctx, next) => {
