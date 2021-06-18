@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: helloworld
-          image: scottdkey/basic-api:1.0.4
+          image: scottdkey/basic-api:1.0.0
           ports:
             - containerPort: 5000
           resources:
