@@ -51,10 +51,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:$(echo $GITHUB_SHA | head -c7)
+          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{steps.package-version.outputs.current-version}}
 
       - name: Update deployment file
-        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
+        run: TAG=$(echo ${{steps.package-version.outputs.current-version}}) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: deploy to kube cluster
         uses: actions-hub/kubectl@master
