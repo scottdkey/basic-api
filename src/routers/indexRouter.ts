@@ -17,5 +17,10 @@ indexRouter.get('/test', async (ctx, next) => {
   ctx.status = 200
   next()
 })
+indexRouter.get('/v3', async (ctx, next) => {
+  ctx.body = { message: "1.0.3 update successful" }
+  ctx.status = 200
+  next()
+})
 
 export { indexRouter }

@@ -48,4 +48,16 @@ describe('routes:index', () => {
         done()
       })
   })
+  it('point update test for kube CICD test', (done) => {
+    chai
+      .request(server)
+      .get('/test')
+      .end((err, res) => {
+        should.not.exist(err)
+        res.status.should.equal(200);
+        res.type.should.equal('application/json')
+        res.body.message.should.equal("1.0.3 update successful")
+        done()
+      })
+  })
 })
