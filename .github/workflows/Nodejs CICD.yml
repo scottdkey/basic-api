@@ -71,20 +71,22 @@ jobs:
         run: TAG=$(echo ${{steps.short-sha.outputs.sha}}) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: Apply Service.yaml
-        uses: steebchen/kubectl@v2.0.0
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          config: ${{ secrets.KUBECONFIG }}
-          command: apply -f service.yaml
+          args: apply -f service.yaml
 
-      - name: Apply Deployment.yaml
-        uses: steebchen/kubectl@v2.0.0
+      - name: Apply Service.yaml
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          config: ${{ secrets.KUBECONFIG }}
-          command: apply -f deployment.yaml
+          args: apply -f deployment.yaml
 
-      - name: verify deployment
-        uses: steebchen/kubectl@v2.0.0
+      - name: Apply Service.yaml
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          config: ${{ secrets.KUBECONFIG }}
-          version: v1.21.0 # specify kubectl binary version explicitly
-          command: rollout status deployment/basic-api
+          args: rollout status deployment/basic-api
