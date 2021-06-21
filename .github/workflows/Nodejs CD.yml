@@ -17,13 +17,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: deploy to cluster
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+      - name: set kube context
+        uses: azure/k8s-set-context@v1
         with:
-          args: apply -f deployment.yaml
+          method: kubeconfig
+          kubeConfig: ${{ secrets.KUBECONFIG }}
 
+      - name: Update deployment
+        uses: Azure/k8s-deploy@v1.4
+        with:
+          namespace: "default"
+          manifests: |
+            deployment.yaml
+            service.yaml
+          images: ghcr.scottdkey/basic-api:${{ github.sha }}
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}

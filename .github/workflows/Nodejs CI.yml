@@ -10,28 +10,35 @@ on:
 
 jobs:
   on-success:
-    name: build and push to dockerhub
+    name: build and push to container registries
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+
+      - name: Add to github container registry
+        id: docker_build
+        uses: docker/build-push-action@v2
         with:
-          node-version: 16.x
+          push: true
+          tags: scottdkey/basic-api:${{github.sha}}
+
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
+
       - name: Log into Docker Hub
         uses: docker/login-action@v1.9.0
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
+
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{steps.package-version.outputs.current-version}}
+
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
