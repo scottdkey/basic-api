@@ -14,6 +14,7 @@ spec:
       labels:
         app: helloworld
     spec:
+      revisionHistoryLimit: 3
       containers:
         - name: helloworld
           image: <IMAGE>
