@@ -4,11 +4,33 @@
 name: CICD
 
 on:
-  workflow_run:
-    workflows: ["Test"]
-    types: [completed]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: yarn --prefer-offline
+
+      - name: Test Suite
+        run: yarn test
   on-success:
     name: Stable Build
     runs-on: ubuntu-latest
@@ -31,26 +53,26 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
 
-      - name: Push to Docker Hub
+      - name: Build and Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{github.sha}}
 
-      - name: Update deployment file
+      - name: Update deployment manifest with current image
         run: TAG=$(echo ${{github.sha}} | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
-      - name: Update deployment
-        uses: Azure/k8s-deploy@v1.4
-        with:
-          namespace: "default"
-          manifests: |
-            deployment.yaml
-            service.yaml
-          images: scottdkey/basic-api:${{ github.sha }}
+      - name: Apply Service Manifest
+        run: kubectl apply -f service.yaml
+
+      - name: Apply Kubernetes Deployment Manifest
+        run: kubectl apply -f deployment.yaml
+
+      - name: Verify Deployment
+        run: kubectl rollout status deployment/basic-api
 
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
-      - run: echo "Test was a failure"
+      - run: echo "Pipeline Failed"
