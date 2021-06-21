@@ -12,7 +12,7 @@ on:
 jobs:
   test:
     name: Test
-    environment: production
+    environment: testing
     runs-on: ubuntu-latest
 
     strategy:

@@ -9,7 +9,7 @@ jobs:
   on-success:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: CD
     steps:
       - uses: actions/checkout@v2
 
