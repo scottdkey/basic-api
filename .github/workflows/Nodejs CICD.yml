@@ -57,20 +57,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: set kube context
-        uses: azure/k8s-set-context@v1
-        with:
-          method: kubeconfig
-          kubeConfig: ${{ secrets.KUBECONFIG }}
-
       - name: Update deployment manifest with current image
         run: TAG=$(echo ${{github.sha}} | head -c7) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
-      - name: Apply Service Manifest
-        run: kubectl apply -f service.yaml
+      - name: Apply Service.yaml
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBECONFIG }}
+          command: apply -f service.yaml
 
-      - name: Apply Kubernetes Deployment Manifest
-        run: kubectl apply -f deployment.yaml
+      - name: Apply Deployment.yaml
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBECONFIG }}
+          command: apply -f deployment.yaml
 
-      - name: Verify Deployment
-        run: kubectl rollout status deployment/basic-api
+      - name: verify deployment
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBECONFIG }}
+          version: v1.21.0 # specify kubectl binary version explicitly
+          command: rollout status deployment/basic-api
