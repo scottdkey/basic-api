@@ -38,6 +38,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 6
+
       - name: Log into Docker Hub
         uses: docker/login-action@v1.9.0
         with:
@@ -48,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{github.sha}}
+          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{ steps.short-sha.outputs.sha }}
 
   deploy:
     name: Deploy
@@ -57,8 +62,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 6
+
       - name: Update deployment manifest with current image
-        run: TAG=$(echo ${{github.sha}}) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
+        run: TAG=$(echo ${{steps.short-sha.outputs.sha}}) && sed -i 's|<IMAGE>|scottdkey/basic-api:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yaml
 
       - name: Apply Service.yaml
         uses: steebchen/kubectl@v2.0.0
