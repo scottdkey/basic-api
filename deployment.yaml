@@ -5,6 +5,7 @@ metadata:
   labels:
     app: helloworld
 spec:
+  revisionHistoryLimit: 3
   replicas: 1
   selector:
     matchLabels:
@@ -14,7 +15,6 @@ spec:
       labels:
         app: helloworld
     spec:
-      revisionHistoryLimit: 3
       containers:
         - name: helloworld
           image: <IMAGE>
