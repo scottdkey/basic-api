@@ -17,8 +17,8 @@ indexRouter.get('/test', async (ctx, next) => {
   ctx.status = 200
   next()
 })
-indexRouter.get('/v4', async (ctx, next) => {
-  ctx.body = { message: "kube update v4" }
+indexRouter.get('/v5', async (ctx, next) => {
+  ctx.body = { message: "kube update v5" }
   ctx.status = 200
   next()
 })

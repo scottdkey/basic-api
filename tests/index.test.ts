@@ -51,12 +51,12 @@ describe('routes:index', () => {
   it('point update test for kube CICD test', (done) => {
     chai
       .request(server)
-      .get('/v4')
+      .get('/v5')
       .end((err, res) => {
         should.not.exist(err)
         res.status.should.equal(200);
         res.type.should.equal('application/json')
-        res.body.message.should.equal("kube update v4")
+        res.body.message.should.equal("kube update v5")
         done()
       })
   })
