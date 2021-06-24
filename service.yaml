@@ -5,7 +5,7 @@ metadata:
   labels:
     app: helloworld
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: helloworld
   ports:
