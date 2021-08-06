@@ -23,7 +23,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          args: set image deployment/basic-api basic=scottdkey/basic-api:${{ steps.short-sha.outputs.sha }}
+          args: set image deployment/basic-api basic-api=scottdkey/basic-api:${{ steps.short-sha.outputs.sha }}
 
       - name: Verify Deployment
         uses: actions-hub/kubectl@master
