@@ -7,14 +7,17 @@ config()
 
 const app = new koa()
 app.use(bodyParser())
-const envPort = process.env.PORT ? process.env.PORT : "5000"
-const PORT: string = process.env.NODE_ENV == 'test' ? "8000" : envPort
+
+
+const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5000
+// const PORT: string = process.env.NODE_ENV == 'test' ? "8000" : envPort
 
 app.use(indexRouter.routes())
 
 export const server = app.listen(PORT, () => {
   console.log(`Running on http://localhost:${PORT}`)
 })
+
 
 
 

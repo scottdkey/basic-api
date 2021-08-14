@@ -4,7 +4,6 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn
 COPY . .
-RUN yarn test
 RUN yarn tsc
 
 

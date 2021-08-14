@@ -3,27 +3,27 @@ kind: Deployment
 metadata:
   name: basic-api
   labels:
-    app: helloworld
+    app: basic
 spec:
   revisionHistoryLimit: 3
   replicas: 1
   selector:
     matchLabels:
-      app: helloworld
+      app: basic
   template:
     metadata:
       labels:
-        app: helloworld
+        app: basic
     spec:
       containers:
-        - name: helloworld
-          image: <IMAGE>
+        - name: basic
+          image: scottdkey/basic-api
           ports:
             - containerPort: 5000
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "300m"
+              memory: "64Mi"
+              cpu: "200m"
             limits:
               memory: "256Mi"
               cpu: "600m"

@@ -23,7 +23,7 @@ jobs:
           length: 6
 
       - name: Log into Docker Hub
-        uses: docker/login-action@v1.9.0
+        uses: docker/login-action@v1.10.0
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: scottdkey/basic-api:latest, scottdkey/basic-api:${{ steps.short-sha.outputs.sha }}
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/basic-api:latest, ${{secrets.DOCKERHUB_USERNAME}}/basic-api:${{ steps.short-sha.outputs.sha }}
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}

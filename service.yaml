@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: basic-api-service
   labels:
-    app: helloworld
+    app: basic
 spec:
   type: ClusterIP
   selector:
-    app: helloworld
+    app: basic
   ports:
     - protocol: TCP
       name: http
